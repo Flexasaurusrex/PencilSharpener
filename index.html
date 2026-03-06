@@ -487,6 +487,7 @@
     <div class="collection-label">
       🏆 My Stub Collection
       <span class="coll-count" id="collCount">0</span>
+      <button onclick="clearAllStubs()" style="margin-left:auto;background:none;border:1px solid #c0b0a0;color:#a09080;border-radius:20px;padding:2px 10px;font-size:0.72rem;cursor:pointer;font-family:'Nunito',sans-serif;font-weight:700;" title="Clear collection">🗑 clear</button>
     </div>
     <div class="collection-shelf" id="collShelf">
       <div class="empty-coll" id="emptyColl">Sharpen some pencils to grow your collection!</div>
@@ -566,48 +567,227 @@ function playPop() {
 }
 
 // ── Pencil Data ─────────────────────────────────────────────────────────────
-// pattern: null | 'tiedye' | 'cosmic' | 'zebra' | 'flames' | 'hearts' | 'dots' | 'stripes' | 'naked' | 'emoji' | 'rainbow' | 'camo' | 'glitch' | 'bacon' | 'eyeball' | 'money' | 'lightning' | 'pizza' | 'holographic'
 const PENCIL_DESIGNS = [
-  // OGs
-  { name: "Classic #2",    body: "#f5c518", accent: "#2d2d2d", ferrule: "#c0a080", eraser: "#ffb3ba", pattern: null },
-  { name: "Firestarter",   body: "#e63946", accent: "#fff",    ferrule: "#888",    eraser: "#ffd6d6", pattern: null },
-  { name: "Ocean Blue",    body: "#1d7bd7", accent: "#fff",    ferrule: "#aad4f5", eraser: "#d0eeff", pattern: null },
-  // Tie Dye
-  { name: "Tie Dye 🌀",    body: "#ff70a6", accent: "#fff",    ferrule: "#f9c74f", eraser: "#fff0f8", pattern: 'tiedye' },
-  { name: "Hippie Dye 🌈", body: "#9b5de5", accent: "#fff",    ferrule: "#f15bb5", eraser: "#fee440", pattern: 'tiedye' },
-  // Cosmic / Space
-  { name: "Cosmic ✨",     body: "#0d0d2b", accent: "#e0aaff", ferrule: "#9b5de5", eraser: "#c77dff", pattern: 'cosmic' },
-  { name: "Nebula 🌌",     body: "#03045e", accent: "#ade8f4", ferrule: "#0096c7", eraser: "#90e0ef", pattern: 'cosmic' },
-  // Naked Lady 💃
-  { name: "Pin-Up 💃",     body: "#ffcba4", accent: "#8b3a52", ferrule: "#e8a87c", eraser: "#fce4ec", pattern: 'naked' },
-  { name: "Risqué 🍑",     body: "#ffe0bd", accent: "#c2185b", ferrule: "#f48fb1", eraser: "#fce4ec", pattern: 'naked' },
-  // Funny faces / emoji
-  { name: "Smiley 😂",     body: "#ffee55", accent: "#333",    ferrule: "#ffd600", eraser: "#fff176", pattern: 'emoji', emoji: '😂' },
-  { name: "Skull 💀",      body: "#1a1a1a", accent: "#fff",    ferrule: "#555",    eraser: "#888",    pattern: 'emoji', emoji: '💀' },
-  { name: "Poop 💩",       body: "#7b4f2e", accent: "#fff",    ferrule: "#a06a3e", eraser: "#ffee99", pattern: 'emoji', emoji: '💩' },
-  { name: "Fire 🔥",       body: "#e85d04", accent: "#fff",    ferrule: "#faa307", eraser: "#ffe066", pattern: 'emoji', emoji: '🔥' },
-  { name: "Alien 👽",      body: "#39ff14", accent: "#000",    ferrule: "#a8ff50", eraser: "#ccff88", pattern: 'emoji', emoji: '👽' },
-  { name: "Devil 😈",      body: "#c1121f", accent: "#fff",    ferrule: "#780000", eraser: "#ff6666", pattern: 'emoji', emoji: '😈' },
-  // Patterns
-  { name: "Zebra 🦓",      body: "#fff",    accent: "#000",    ferrule: "#888",    eraser: "#eee",    pattern: 'zebra' },
-  { name: "Camo 🪖",       body: "#606c38", accent: "#fff",    ferrule: "#4a5220", eraser: "#a4b872", pattern: 'camo' },
-  { name: "Flames 🔥",     body: "#1a1a1a", accent: "#faa307", ferrule: "#dc2f02", eraser: "#ff6b35", pattern: 'flames' },
-  { name: "Hearts 💖",     body: "#ffe4f0", accent: "#e63946", ferrule: "#f48fb1", eraser: "#fce4ec", pattern: 'hearts' },
-  { name: "Polka Dots 🔵", body: "#fff9c4", accent: "#1565c0", ferrule: "#90caf9", eraser: "#e3f2fd", pattern: 'dots' },
-  { name: "Rainbow 🌈",    body: "#fff",    accent: "#333",    ferrule: "#ddd",    eraser: "#fff",    pattern: 'rainbow' },
-  { name: "Glitch 👾",     body: "#0f0f0f", accent: "#00ff41", ferrule: "#ff00ff", eraser: "#00ffff", pattern: 'glitch' },
-  // Food / LOL
-  { name: "Bacon 🥓",      body: "#e8b4b8", accent: "#8b2635", ferrule: "#c77dff", eraser: "#ffcba4", pattern: 'bacon' },
-  { name: "Pizza 🍕",      body: "#f4a261", accent: "#e76f51", ferrule: "#e9c46a", eraser: "#f4e285", pattern: 'pizza' },
-  // Wild
-  { name: "Eyeball 👁",    body: "#fff",    accent: "#1a1a1a", ferrule: "#ddd",    eraser: "#ffb3ba", pattern: 'eyeball' },
-  { name: "Money 💵",      body: "#2d6a4f", accent: "#d8f3dc", ferrule: "#52b788", eraser: "#b7e4c7", pattern: 'money' },
-  { name: "Lightning ⚡",  body: "#1a1a2e", accent: "#ffe566", ferrule: "#ffd60a", eraser: "#ffee99", pattern: 'lightning' },
-  { name: "Holographic ✦", body: "#e0e0e0", accent: "#9b5de5", ferrule: "#c0a0ff", eraser: "#f0e0ff", pattern: 'holographic' },
-  // Extra fun
-  { name: "Bee 🐝",        body: "#ffd60a", accent: "#1a1a00", ferrule: "#333",    eraser: "#fff59d", pattern: 'bee' },
-  { name: "Watermelon 🍉", body: "#ff595e", accent: "#fff",    ferrule: "#8ac926", eraser: "#caffbf", pattern: 'watermelon' },
-  { name: "Stealth",       body: "#2d2d2d", accent: "#e0e0e0", ferrule: "#555",    eraser: "#666",    pattern: null },
+  // ── Originals ──
+  { name: "Classic #2",      body:"#f5c518", accent:"#2d2d2d", ferrule:"#c0a080", eraser:"#ffb3ba", pattern:null },
+  { name: "Firestarter",     body:"#e63946", accent:"#fff",    ferrule:"#888",    eraser:"#ffd6d6", pattern:null },
+  { name: "Ocean Blue",      body:"#1d7bd7", accent:"#fff",    ferrule:"#aad4f5", eraser:"#d0eeff", pattern:null },
+  { name: "Midnight",        body:"#1a1a2e", accent:"#e94560", ferrule:"#555",    eraser:"#e94560", pattern:null },
+  { name: "Lime Zap",        body:"#aacc00", accent:"#1a1a00", ferrule:"#c8b400", eraser:"#f0ff80", pattern:null },
+  { name: "Cotton Candy",    body:"#ff70a6", accent:"#fff",    ferrule:"#ffb3d4", eraser:"#fff0f8", pattern:null },
+  { name: "Galaxy",          body:"#3d1a78", accent:"#e0aaff", ferrule:"#9b5de5", eraser:"#c77dff", pattern:null },
+  { name: "Forest",          body:"#2d6a4f", accent:"#d8f3dc", ferrule:"#b7e4c7", eraser:"#d8f3dc", pattern:null },
+  { name: "Sunset",          body:"#ff9f1c", accent:"#fff",    ferrule:"#ffbf69", eraser:"#fff3cd", pattern:null },
+  { name: "Stealth",         body:"#444",    accent:"#e0e0e0", ferrule:"#888",    eraser:"#666",    pattern:null },
+  { name: "Cherry Blossom",  body:"#ffb7c5", accent:"#8b3a52", ferrule:"#f7c9d5", eraser:"#ffe4ec", pattern:null },
+  { name: "Toxic",           body:"#39ff14", accent:"#1a1a1a", ferrule:"#a8ff50", eraser:"#ccff88", pattern:null },
+  { name: "Retro Wood",      body:"#c68642", accent:"#fff8ee", ferrule:"#8b5e3c", eraser:"#d4a574", pattern:null },
+  { name: "Ice Queen",       body:"#caf0f8", accent:"#0077b6", ferrule:"#ade8f4", eraser:"#e0f7fa", pattern:null },
+  { name: "Bubblegum",       body:"#ff9ef0", accent:"#b5179e", ferrule:"#f72585", eraser:"#ffcef3", pattern:null },
+  { name: "Denim",           body:"#3d5a80", accent:"#e0fbfc", ferrule:"#98c1d9", eraser:"#e0fbfc", pattern:null },
+  { name: "Lava",            body:"#e85d04", accent:"#faa307", ferrule:"#dc2f02", eraser:"#ffba08", pattern:null },
+  { name: "Minty Fresh",     body:"#80ffdb", accent:"#0a9396", ferrule:"#52b69a", eraser:"#b7e4c7", pattern:null },
+  { name: "Tie Dye 🌀",      body:"#ff70a6", accent:"#fff",    ferrule:"#f9c74f", eraser:"#fff0f8", pattern:'tiedye' },
+  { name: "Hippie Dye 🌈",   body:"#9b5de5", accent:"#fff",    ferrule:"#f15bb5", eraser:"#fee440", pattern:'tiedye' },
+  { name: "Cosmic ✨",       body:"#0d0d2b", accent:"#e0aaff", ferrule:"#9b5de5", eraser:"#c77dff", pattern:'cosmic' },
+  { name: "Nebula 🌌",       body:"#03045e", accent:"#ade8f4", ferrule:"#0096c7", eraser:"#90e0ef", pattern:'cosmic' },
+  { name: "Pin-Up 💃",       body:"#ffcba4", accent:"#8b3a52", ferrule:"#e8a87c", eraser:"#fce4ec", pattern:'naked' },
+  { name: "Risque 🍑",       body:"#ffe0bd", accent:"#c2185b", ferrule:"#f48fb1", eraser:"#fce4ec", pattern:'naked' },
+  { name: "Smiley 😂",       body:"#ffee55", accent:"#333",    ferrule:"#ffd600", eraser:"#fff176", pattern:'emoji', emoji:'😂' },
+  { name: "Skull 💀",        body:"#1a1a1a", accent:"#fff",    ferrule:"#555",    eraser:"#888",    pattern:'emoji', emoji:'💀' },
+  { name: "Poop 💩",         body:"#7b4f2e", accent:"#fff",    ferrule:"#a06a3e", eraser:"#ffee99", pattern:'emoji', emoji:'💩' },
+  { name: "Fire 🔥",         body:"#e85d04", accent:"#fff",    ferrule:"#faa307", eraser:"#ffe066", pattern:'emoji', emoji:'🔥' },
+  { name: "Alien 👽",        body:"#39ff14", accent:"#000",    ferrule:"#a8ff50", eraser:"#ccff88", pattern:'emoji', emoji:'👽' },
+  { name: "Devil 😈",        body:"#c1121f", accent:"#fff",    ferrule:"#780000", eraser:"#ff6666", pattern:'emoji', emoji:'😈' },
+  { name: "Zebra 🦓",        body:"#fff",    accent:"#000",    ferrule:"#888",    eraser:"#eee",    pattern:'zebra' },
+  { name: "Camo 🪖",         body:"#606c38", accent:"#fff",    ferrule:"#4a5220", eraser:"#a4b872", pattern:'camo' },
+  { name: "Hellfire 🔥",     body:"#1a1a1a", accent:"#faa307", ferrule:"#dc2f02", eraser:"#ff6b35", pattern:'flames' },
+  { name: "Hearts 💖",       body:"#ffe4f0", accent:"#e63946", ferrule:"#f48fb1", eraser:"#fce4ec", pattern:'hearts' },
+  { name: "Polka Dots 🔵",   body:"#fff9c4", accent:"#1565c0", ferrule:"#90caf9", eraser:"#e3f2fd", pattern:'dots' },
+  { name: "Rainbow 🌈",      body:"#fff",    accent:"#333",    ferrule:"#ddd",    eraser:"#fff",    pattern:'rainbow' },
+  { name: "Glitch 👾",       body:"#0f0f0f", accent:"#00ff41", ferrule:"#ff00ff", eraser:"#00ffff", pattern:'glitch' },
+  { name: "Bacon 🥓",        body:"#e8b4b8", accent:"#8b2635", ferrule:"#c77dff", eraser:"#ffcba4", pattern:'bacon' },
+  { name: "Pizza 🍕",        body:"#f4a261", accent:"#e76f51", ferrule:"#e9c46a", eraser:"#f4e285", pattern:'pizza' },
+  { name: "Eyeball 👁",      body:"#fff",    accent:"#1a1a1a", ferrule:"#ddd",    eraser:"#ffb3ba", pattern:'eyeball' },
+  { name: "Money 💵",        body:"#2d6a4f", accent:"#d8f3dc", ferrule:"#52b788", eraser:"#b7e4c7", pattern:'money' },
+  { name: "Lightning ⚡",    body:"#1a1a2e", accent:"#ffe566", ferrule:"#ffd60a", eraser:"#ffee99", pattern:'lightning' },
+  { name: "Holographic ✦",   body:"#e0e0e0", accent:"#9b5de5", ferrule:"#c0a0ff", eraser:"#f0e0ff", pattern:'holographic' },
+  { name: "Bee 🐝",          body:"#ffd60a", accent:"#1a1a00", ferrule:"#333",    eraser:"#fff59d", pattern:'bee' },
+  { name: "Watermelon 🍉",   body:"#ff595e", accent:"#fff",    ferrule:"#8ac926", eraser:"#caffbf", pattern:'watermelon' },
+  // ── New Solids ──
+  { name: "Rose Gold",       body:"#b76e79", accent:"#fff",    ferrule:"#e8b4b8", eraser:"#fce4ec", pattern:null },
+  { name: "Cobalt",          body:"#0047ab", accent:"#fff",    ferrule:"#4a90d9", eraser:"#cce0ff", pattern:null },
+  { name: "Neon Green",      body:"#39ff14", accent:"#0d2b00", ferrule:"#00cc00", eraser:"#ccff99", pattern:null },
+  { name: "Neon Orange",     body:"#ff6d00", accent:"#fff",    ferrule:"#ff9100", eraser:"#fff3e0", pattern:null },
+  { name: "Neon Purple",     body:"#da00ff", accent:"#fff",    ferrule:"#aa00ff", eraser:"#f3e5f5", pattern:null },
+  { name: "Neon Pink",       body:"#ff0099", accent:"#fff",    ferrule:"#cc0077", eraser:"#fce4ec", pattern:null },
+  { name: "Neon Blue",       body:"#00b4ff", accent:"#fff",    ferrule:"#0077ff", eraser:"#e3f2fd", pattern:null },
+  { name: "Neon Yellow",     body:"#ffff00", accent:"#333",    ferrule:"#ffd600", eraser:"#fffde7", pattern:null },
+  { name: "Hot Pink",        body:"#ff69b4", accent:"#fff",    ferrule:"#ff1493", eraser:"#ffd6e8", pattern:null },
+  { name: "Coral",           body:"#ff6b6b", accent:"#fff",    ferrule:"#ee5253", eraser:"#ffcccc", pattern:null },
+  { name: "Teal",            body:"#00bcd4", accent:"#fff",    ferrule:"#0097a7", eraser:"#e0f7fa", pattern:null },
+  { name: "Electric Teal",   body:"#00e5ff", accent:"#003366", ferrule:"#00bcd4", eraser:"#e0f7fa", pattern:null },
+  { name: "Plum",            body:"#6a0572", accent:"#f8bfd9", ferrule:"#9c27b0", eraser:"#e1bee7", pattern:null },
+  { name: "Rust",            body:"#8b2500", accent:"#ffd7ba", ferrule:"#cd5c3c", eraser:"#ffe4d6", pattern:null },
+  { name: "Gold Rush",       body:"#ffd700", accent:"#3d2b00", ferrule:"#b8860b", eraser:"#fff8dc", pattern:null },
+  { name: "Silver Fox",      body:"#c0c0c0", accent:"#1a1a1a", ferrule:"#a8a8a8", eraser:"#e8e8e8", pattern:null },
+  { name: "Copper",          body:"#b87333", accent:"#fff",    ferrule:"#cd7f32", eraser:"#f5deb3", pattern:null },
+  { name: "Bronze",          body:"#cd7f32", accent:"#fff",    ferrule:"#a0522d", eraser:"#f5deb3", pattern:null },
+  { name: "Chrome",          body:"#e8e8e8", accent:"#333",    ferrule:"#aaa",    eraser:"#f5f5f5", pattern:null },
+  { name: "Obsidian",        body:"#0d0d0d", accent:"#39ff14", ferrule:"#1a1a1a", eraser:"#333",    pattern:null },
+  { name: "Flamingo",        body:"#fc8eac", accent:"#fff",    ferrule:"#f06292", eraser:"#fce4ec", pattern:null },
+  { name: "Sage",            body:"#87ae73", accent:"#2d4a1e", ferrule:"#6a994e", eraser:"#d8f3dc", pattern:null },
+  { name: "Mustard",         body:"#e3a817", accent:"#3d2b00", ferrule:"#c8860a", eraser:"#fff3cd", pattern:null },
+  { name: "Slate",           body:"#708090", accent:"#fff",    ferrule:"#b0c4de", eraser:"#e8eef4", pattern:null },
+  { name: "Blush",           body:"#ffc8dd", accent:"#8b1a4a", ferrule:"#ffafcc", eraser:"#fff0f3", pattern:null },
+  { name: "Espresso",        body:"#3c1810", accent:"#d4a574", ferrule:"#6f4e37", eraser:"#ffe4c4", pattern:null },
+  { name: "Army",            body:"#4a5240", accent:"#d4e09b", ferrule:"#3d4a20", eraser:"#c5cba0", pattern:null },
+  { name: "Lilac",           body:"#c9b1ff", accent:"#3d1a78", ferrule:"#9b5de5", eraser:"#e0aaff", pattern:null },
+  { name: "Peach",           body:"#ffcba4", accent:"#8b4513", ferrule:"#e8a87c", eraser:"#fdebd0", pattern:null },
+  { name: "Lavender",        body:"#e6e6fa", accent:"#4b0082", ferrule:"#d8b4fe", eraser:"#f3e5f5", pattern:null },
+  { name: "Turquoise",       body:"#40e0d0", accent:"#003333", ferrule:"#20b2aa", eraser:"#e0f7f7", pattern:null },
+  { name: "Maroon",          body:"#800000", accent:"#ffe4e1", ferrule:"#a0522d", eraser:"#ffcdd2", pattern:null },
+  { name: "Navy",            body:"#001f5b", accent:"#fff",    ferrule:"#003399", eraser:"#cce0ff", pattern:null },
+  { name: "Burgundy",        body:"#722f37", accent:"#fff",    ferrule:"#9b2335", eraser:"#ffd6d6", pattern:null },
+  { name: "Olive",           body:"#6b7c3d", accent:"#fff",    ferrule:"#4a5220", eraser:"#d8e0a4", pattern:null },
+  { name: "Mauve",           body:"#e0b0c0", accent:"#6d3b47", ferrule:"#c08090", eraser:"#fce4ec", pattern:null },
+  { name: "Chartreuse",      body:"#7fff00", accent:"#1a3300", ferrule:"#66cc00", eraser:"#e8ffc2", pattern:null },
+  { name: "Magenta",         body:"#ff00ff", accent:"#fff",    ferrule:"#cc00cc", eraser:"#ffe0ff", pattern:null },
+  { name: "Cyan",            body:"#00ffff", accent:"#003333", ferrule:"#00cccc", eraser:"#e0ffff", pattern:null },
+  { name: "Vermillion",      body:"#e34234", accent:"#fff",    ferrule:"#c0392b", eraser:"#ffcdd2", pattern:null },
+  { name: "Indigo",          body:"#3f00ff", accent:"#fff",    ferrule:"#2900b3", eraser:"#e8e0ff", pattern:null },
+  // ── More Tie Dye ──
+  { name: "Sunset Dye",      body:"#ff6b35", accent:"#fff",    ferrule:"#ffd166", eraser:"#fff9c4", pattern:'tiedye' },
+  { name: "Ocean Dye",       body:"#0077b6", accent:"#fff",    ferrule:"#00b4d8", eraser:"#caf0f8", pattern:'tiedye' },
+  { name: "Acid Dye",        body:"#c8f700", accent:"#333",    ferrule:"#ff00ff", eraser:"#fff9c4", pattern:'tiedye' },
+  { name: "Midnight Dye",    body:"#240046", accent:"#fff",    ferrule:"#7b2d8b", eraser:"#e040fb", pattern:'tiedye' },
+  { name: "Desert Dye",      body:"#e07a5f", accent:"#fff",    ferrule:"#f2cc8f", eraser:"#fff3e0", pattern:'tiedye' },
+  { name: "Toxic Dye",       body:"#00ff87", accent:"#003322", ferrule:"#00cc6a", eraser:"#ccffe8", pattern:'tiedye' },
+  { name: "Blood Dye",       body:"#8b0000", accent:"#ff9999", ferrule:"#cc0000", eraser:"#ffcccc", pattern:'tiedye' },
+  // ── More Cosmic ──
+  { name: "Aurora",          body:"#0a0a1a", accent:"#80ffea", ferrule:"#00e5be", eraser:"#b2fef7", pattern:'cosmic' },
+  { name: "Deep Space",      body:"#000010", accent:"#fff",    ferrule:"#333",    eraser:"#9c27b0", pattern:'cosmic' },
+  { name: "Pulsar",          body:"#1a0030", accent:"#f72585", ferrule:"#7209b7", eraser:"#ff85c2", pattern:'cosmic' },
+  { name: "Andromeda",       body:"#0d001a", accent:"#80ff80", ferrule:"#004400", eraser:"#ccffcc", pattern:'cosmic' },
+  { name: "Galaxy Swirl",    body:"#0d0020", accent:"#fff",    ferrule:"#4a0080", eraser:"#ce93d8", pattern:'cosmic' },
+  { name: "Supernova",       body:"#1a0010", accent:"#ff6b35", ferrule:"#8b0000", eraser:"#ffcba4", pattern:'cosmic' },
+  // ── More Emoji ──
+  { name: "Party 🎉",        body:"#ff70a6", accent:"#fff",    ferrule:"#ffd166", eraser:"#fff0f8", pattern:'emoji', emoji:'🎉' },
+  { name: "Unicorn 🦄",      body:"#e0aaff", accent:"#6a0572", ferrule:"#c77dff", eraser:"#fce4ec", pattern:'emoji', emoji:'🦄' },
+  { name: "Robot 🤖",        body:"#78909c", accent:"#e0f7fa", ferrule:"#455a64", eraser:"#cfd8dc", pattern:'emoji', emoji:'🤖' },
+  { name: "Clown 🤡",        body:"#fff",    accent:"#e63946", ferrule:"#ffd166", eraser:"#fff",    pattern:'emoji', emoji:'🤡' },
+  { name: "Ghost 👻",        body:"#f5f5f5", accent:"#333",    ferrule:"#ddd",    eraser:"#eee",    pattern:'emoji', emoji:'👻' },
+  { name: "Zombie 🧟",       body:"#6b8f3e", accent:"#fff",    ferrule:"#4a6741", eraser:"#c5e8a0", pattern:'emoji', emoji:'🧟' },
+  { name: "Ninja 🥷",        body:"#1a1a1a", accent:"#fff",    ferrule:"#333",    eraser:"#555",    pattern:'emoji', emoji:'🥷' },
+  { name: "Cowboy 🤠",       body:"#8b4513", accent:"#fff",    ferrule:"#d2691e", eraser:"#ffe4b5", pattern:'emoji', emoji:'🤠' },
+  { name: "Mermaid 🧜",      body:"#00b4d8", accent:"#fff",    ferrule:"#0077b6", eraser:"#caf0f8", pattern:'emoji', emoji:'🧜' },
+  { name: "Vampire 🧛",      body:"#1a0010", accent:"#ff0050", ferrule:"#8b0000", eraser:"#ff9999", pattern:'emoji', emoji:'🧛' },
+  { name: "Witch 🧙",        body:"#2d1b69", accent:"#a8ff78", ferrule:"#4a0080", eraser:"#d7b3ff", pattern:'emoji', emoji:'🧙' },
+  { name: "Dragon 🐉",       body:"#1b5e20", accent:"#ffeb3b", ferrule:"#2e7d32", eraser:"#c8e6c9", pattern:'emoji', emoji:'🐉' },
+  { name: "Cat 🐱",          body:"#ff8f00", accent:"#fff",    ferrule:"#ffa000", eraser:"#fff8e1", pattern:'emoji', emoji:'🐱' },
+  { name: "Shark 🦈",        body:"#546e7a", accent:"#fff",    ferrule:"#78909c", eraser:"#cfd8dc", pattern:'emoji', emoji:'🦈' },
+  { name: "Dino 🦕",         body:"#33691e", accent:"#fff",    ferrule:"#558b2f", eraser:"#dcedc8", pattern:'emoji', emoji:'🦕' },
+  { name: "Angel 😇",        body:"#fff9c4", accent:"#f57f17", ferrule:"#ffe57f", eraser:"#fffde7", pattern:'emoji', emoji:'😇' },
+  { name: "Nerd 🤓",         body:"#e3f2fd", accent:"#1565c0", ferrule:"#90caf9", eraser:"#e3f2fd", pattern:'emoji', emoji:'🤓' },
+  { name: "Bomb 💣",         body:"#1a1a1a", accent:"#ff0",    ferrule:"#444",    eraser:"#888",    pattern:'emoji', emoji:'💣' },
+  { name: "Crystal Ball 🔮", body:"#4a0080", accent:"#e0aaff", ferrule:"#7b2d8b", eraser:"#ce93d8", pattern:'emoji', emoji:'🔮' },
+  { name: "Trophy 🏆",       body:"#f9c74f", accent:"#3d2b00", ferrule:"#f8961e", eraser:"#fff3cd", pattern:'emoji', emoji:'🏆' },
+  { name: "Disco 🪩",        body:"#1a1a1a", accent:"#fff",    ferrule:"#f72585", eraser:"#e040fb", pattern:'emoji', emoji:'🪩' },
+  { name: "Mushroom 🍄",     body:"#e63946", accent:"#fff",    ferrule:"#c1121f", eraser:"#ffd6d6", pattern:'emoji', emoji:'🍄' },
+  { name: "Cactus 🌵",       body:"#2d6a4f", accent:"#fff",    ferrule:"#52b788", eraser:"#d8f3dc", pattern:'emoji', emoji:'🌵' },
+  { name: "Tornado 🌪",      body:"#90a4ae", accent:"#fff",    ferrule:"#607d8b", eraser:"#eceff1", pattern:'emoji', emoji:'🌪' },
+  { name: "Eggplant 🍆",     body:"#4a148c", accent:"#fff",    ferrule:"#6a1b9a", eraser:"#e1bee7", pattern:'emoji', emoji:'🍆' },
+  { name: "Dog 🐶",          body:"#a0522d", accent:"#fff",    ferrule:"#8b4513", eraser:"#ffe4b5", pattern:'emoji', emoji:'🐶' },
+  { name: "Broccoli 🥦",     body:"#2e7d32", accent:"#fff",    ferrule:"#388e3c", eraser:"#c8e6c9", pattern:'emoji', emoji:'🥦' },
+  { name: "Pirate ☠",        body:"#1a1a1a", accent:"#fff",    ferrule:"#8b0000", eraser:"#555",    pattern:'emoji', emoji:'☠' },
+  { name: "Monkey 🐒",       body:"#8b4513", accent:"#ffe4b5", ferrule:"#a0522d", eraser:"#fdebd0", pattern:'emoji', emoji:'🐒' },
+  { name: "Panda 🐼",        body:"#fff",    accent:"#1a1a1a", ferrule:"#ccc",    eraser:"#eee",    pattern:'emoji', emoji:'🐼' },
+  { name: "Fox 🦊",          body:"#e85d04", accent:"#fff",    ferrule:"#faa307", eraser:"#fff3e0", pattern:'emoji', emoji:'🦊' },
+  { name: "Frog 🐸",         body:"#2d6a4f", accent:"#fff",    ferrule:"#52b788", eraser:"#d8f3dc", pattern:'emoji', emoji:'🐸' },
+  { name: "Owl 🦉",          body:"#8b5e3c", accent:"#fff",    ferrule:"#a0522d", eraser:"#ffe4b5", pattern:'emoji', emoji:'🦉' },
+  { name: "Penguin 🐧",      body:"#1a1a1a", accent:"#fff",    ferrule:"#333",    eraser:"#f5c518", pattern:'emoji', emoji:'🐧' },
+  { name: "T-Rex 🦖",        body:"#2d6a4f", accent:"#f9c74f", ferrule:"#1b5e20", eraser:"#dcedc8", pattern:'emoji', emoji:'🦖' },
+  { name: "Spider 🕷",       body:"#1a1a1a", accent:"#ff0000", ferrule:"#333",    eraser:"#555",    pattern:'emoji', emoji:'🕷' },
+  { name: "Crab 🦀",         body:"#e63946", accent:"#fff",    ferrule:"#c1121f", eraser:"#ffd6d6", pattern:'emoji', emoji:'🦀' },
+  { name: "Lobster 🦞",      body:"#c1121f", accent:"#fff",    ferrule:"#780000", eraser:"#ffb3ba", pattern:'emoji', emoji:'🦞' },
+  { name: "Snail 🐌",        body:"#8b6914", accent:"#fff",    ferrule:"#a0522d", eraser:"#ffe4b5", pattern:'emoji', emoji:'🐌' },
+  { name: "Butterfly 🦋",    body:"#e0aaff", accent:"#4a0080", ferrule:"#9b5de5", eraser:"#f3e5f5", pattern:'emoji', emoji:'🦋' },
+  { name: "Bee Emoji 🐝",    body:"#ffd60a", accent:"#1a1a1a", ferrule:"#333",    eraser:"#fff9c4", pattern:'emoji', emoji:'🐝' },
+  { name: "Ladybug 🐞",      body:"#e63946", accent:"#fff",    ferrule:"#c1121f", eraser:"#ffd6d6", pattern:'emoji', emoji:'🐞' },
+  { name: "Clam 🦪",         body:"#f5f5dc", accent:"#8b7355", ferrule:"#d4a574", eraser:"#fffde7", pattern:'emoji', emoji:'🦪' },
+  { name: "Whale 🐋",        body:"#1d7bd7", accent:"#fff",    ferrule:"#0077b6", eraser:"#caf0f8", pattern:'emoji', emoji:'🐋' },
+  { name: "Octopus 🐙",      body:"#e85d04", accent:"#fff",    ferrule:"#dc2f02", eraser:"#ffcba4", pattern:'emoji', emoji:'🐙' },
+  { name: "Sun 🌞",          body:"#ffd700", accent:"#e65100", ferrule:"#ff9100", eraser:"#fffde7", pattern:'emoji', emoji:'🌞' },
+  { name: "Moon 🌙",         body:"#ffd166", accent:"#3d2b00", ferrule:"#f9c74f", eraser:"#fff9c4", pattern:'emoji', emoji:'🌙' },
+  { name: "Rainbow Emoji 🌈",body:"#87ceeb", accent:"#333",    ferrule:"#90caf9", eraser:"#e3f2fd", pattern:'emoji', emoji:'🌈' },
+  { name: "Lightning Bolt ⚡",body:"#1a1a2e", accent:"#ffe566", ferrule:"#ffd60a", eraser:"#ffee99", pattern:'emoji', emoji:'⚡' },
+  { name: "Snowflake ❄",     body:"#e0f7fa", accent:"#0077b6", ferrule:"#90e0ef", eraser:"#fff",    pattern:'emoji', emoji:'❄' },
+  { name: "Volcano 🌋",      body:"#e85d04", accent:"#fff",    ferrule:"#dc2f02", eraser:"#ffba08", pattern:'emoji', emoji:'🌋' },
+  { name: "Wave 🌊",         body:"#0077b6", accent:"#fff",    ferrule:"#00b4d8", eraser:"#caf0f8", pattern:'emoji', emoji:'🌊' },
+  { name: "Comet ☄",         body:"#1a1a2e", accent:"#ffd700", ferrule:"#555",    eraser:"#fffde7", pattern:'emoji', emoji:'☄' },
+  { name: "Planet 🪐",       body:"#9b5de5", accent:"#fff",    ferrule:"#7b2d8b", eraser:"#e1bee7", pattern:'emoji', emoji:'🪐' },
+  { name: "Rocket 🚀",       body:"#455a64", accent:"#fff",    ferrule:"#607d8b", eraser:"#eceff1", pattern:'emoji', emoji:'🚀' },
+  { name: "UFO 🛸",          body:"#c0c0c0", accent:"#00e5ff", ferrule:"#78909c", eraser:"#e0f7fa", pattern:'emoji', emoji:'🛸' },
+  { name: "Chill 🥶",        body:"#caf0f8", accent:"#0077b6", ferrule:"#90e0ef", eraser:"#e0f7fa", pattern:'emoji', emoji:'🥶' },
+  { name: "Hot 🥵",          body:"#e85d04", accent:"#fff",    ferrule:"#dc2f02", eraser:"#ffba08", pattern:'emoji', emoji:'🥵' },
+  { name: "Zany 🤪",         body:"#ff70a6", accent:"#fff",    ferrule:"#f9c74f", eraser:"#fff0f8", pattern:'emoji', emoji:'🤪' },
+  { name: "Cursed 🤬",       body:"#c1121f", accent:"#fff",    ferrule:"#780000", eraser:"#ffb3ba", pattern:'emoji', emoji:'🤬' },
+  { name: "Crying 😭",       body:"#90caf9", accent:"#1565c0", ferrule:"#64b5f6", eraser:"#e3f2fd", pattern:'emoji', emoji:'😭' },
+  { name: "Sunglasses 😎",   body:"#1a1a1a", accent:"#ffd700", ferrule:"#333",    eraser:"#555",    pattern:'emoji', emoji:'😎' },
+  { name: "Nauseated 🤢",    body:"#39ff14", accent:"#003300", ferrule:"#00cc00", eraser:"#ccff99", pattern:'emoji', emoji:'🤢' },
+  { name: "Exploding 🤯",    body:"#e63946", accent:"#fff",    ferrule:"#c1121f", eraser:"#ffd6d6", pattern:'emoji', emoji:'🤯' },
+  { name: "Money Mouth 🤑",  body:"#2d6a4f", accent:"#ffd700", ferrule:"#52b788", eraser:"#b7e4c7", pattern:'emoji', emoji:'🤑' },
+  { name: "Monocle 🧐",      body:"#1a1a2e", accent:"#fff",    ferrule:"#444",    eraser:"#ccc",    pattern:'emoji', emoji:'🧐' },
+  { name: "Partying 🥳",     body:"#ff70a6", accent:"#fff",    ferrule:"#ffd166", eraser:"#fff0f8", pattern:'emoji', emoji:'🥳' },
+  { name: "Melting 🫠",      body:"#ffd166", accent:"#333",    ferrule:"#f9c74f", eraser:"#fff9c4", pattern:'emoji', emoji:'🫠' },
+  { name: "Shushing 🤫",     body:"#ffcba4", accent:"#8b4513", ferrule:"#d4a574", eraser:"#fdebd0", pattern:'emoji', emoji:'🤫' },
+  { name: "Lying 🤥",        body:"#ffe0bd", accent:"#8b4513", ferrule:"#d4a574", eraser:"#fdebd0", pattern:'emoji', emoji:'🤥' },
+  // ── More Naked ──
+  { name: "Bronze Goddess",  body:"#cd853f", accent:"#fff",    ferrule:"#d4a460", eraser:"#fdebd0", pattern:'naked' },
+  // ── More Zebra ──
+  { name: "Tiger 🐯",        body:"#ff8c00", accent:"#1a1a1a", ferrule:"#e65c00", eraser:"#ffe0b2", pattern:'zebra' },
+  { name: "Skunk 🦨",        body:"#1a1a1a", accent:"#fff",    ferrule:"#555",    eraser:"#eee",    pattern:'zebra' },
+  { name: "Barcode",         body:"#fff",    accent:"#000",    ferrule:"#ddd",    eraser:"#fff",    pattern:'zebra' },
+  { name: "Piano Keys 🎹",   body:"#fff",    accent:"#1a1a1a", ferrule:"#888",    eraser:"#fff",    pattern:'zebra' },
+  // ── More Camo ──
+  { name: "Desert Camo",     body:"#c2b280", accent:"#fff",    ferrule:"#a0896a", eraser:"#f5deb3", pattern:'camo' },
+  { name: "Snow Camo",       body:"#e8e8e8", accent:"#333",    ferrule:"#ccc",    eraser:"#f5f5f5", pattern:'camo' },
+  { name: "Urban Camo",      body:"#808080", accent:"#fff",    ferrule:"#555",    eraser:"#ccc",    pattern:'camo' },
+  { name: "Pink Camo 💕",    body:"#ff9eb5", accent:"#fff",    ferrule:"#ff69b4", eraser:"#fce4ec", pattern:'camo' },
+  { name: "Ocean Camo",      body:"#1d7bd7", accent:"#fff",    ferrule:"#0077b6", eraser:"#caf0f8", pattern:'camo' },
+  // ── More Flames ──
+  { name: "Blue Flame",      body:"#0d0d2b", accent:"#00e5ff", ferrule:"#0077b6", eraser:"#caf0f8", pattern:'flames' },
+  { name: "Green Flame",     body:"#0a1a0a", accent:"#39ff14", ferrule:"#006400", eraser:"#ccff99", pattern:'flames' },
+  { name: "Purple Flame",    body:"#1a001a", accent:"#da00ff", ferrule:"#7b2d8b", eraser:"#e1bee7", pattern:'flames' },
+  { name: "Gold Flame",      body:"#1a1000", accent:"#ffd700", ferrule:"#b8860b", eraser:"#fff8dc", pattern:'flames' },
+  { name: "Pink Flame",      body:"#1a000a", accent:"#ff69b4", ferrule:"#c2185b", eraser:"#fce4ec", pattern:'flames' },
+  // ── More Hearts ──
+  { name: "Black Hearts 🖤", body:"#1a1a1a", accent:"#ff1744", ferrule:"#555",    eraser:"#888",    pattern:'hearts' },
+  { name: "Gold Hearts",     body:"#1a1000", accent:"#ffd700", ferrule:"#b8860b", eraser:"#fff8dc", pattern:'hearts' },
+  { name: "Rainbow Hearts",  body:"#fff0f8", accent:"#ff1493", ferrule:"#ff69b4", eraser:"#fce4ec", pattern:'hearts' },
+  { name: "Blue Hearts 💙",  body:"#e3f2fd", accent:"#1565c0", ferrule:"#90caf9", eraser:"#e3f2fd", pattern:'hearts' },
+  // ── More Dots ──
+  { name: "Confetti Dots",   body:"#fff",    accent:"#f72585", ferrule:"#ffe0f0", eraser:"#fff",    pattern:'dots' },
+  { name: "Dark Dots",       body:"#1a1a1a", accent:"#39ff14", ferrule:"#333",    eraser:"#555",    pattern:'dots' },
+  { name: "Candy Dots",      body:"#ff70a6", accent:"#fff",    ferrule:"#f9c74f", eraser:"#fff0f8", pattern:'dots' },
+  { name: "Rainbow Dots",    body:"#fff9c4", accent:"#e63946", ferrule:"#f9c74f", eraser:"#fff3cd", pattern:'dots' },
+  // ── More Rainbow ──
+  { name: "Dark Rainbow",    body:"#1a1a1a", accent:"#fff",    ferrule:"#333",    eraser:"#555",    pattern:'rainbow' },
+  { name: "Pastel Rainbow",  body:"#fff0f8", accent:"#999",    ferrule:"#f0e0ff", eraser:"#fff",    pattern:'rainbow' },
+  // ── More Glitch ──
+  { name: "Red Glitch",      body:"#0f0f0f", accent:"#ff0000", ferrule:"#880000", eraser:"#ff9999", pattern:'glitch' },
+  { name: "Gold Glitch",     body:"#0a0800", accent:"#ffd700", ferrule:"#b8860b", eraser:"#fff8dc", pattern:'glitch' },
+  { name: "Pink Glitch",     body:"#0f000a", accent:"#ff0099", ferrule:"#880066", eraser:"#ffd6e8", pattern:'glitch' },
+  // ── More Bee ──
+  { name: "Wasp",            body:"#ffa500", accent:"#1a1a1a", ferrule:"#cc6600", eraser:"#ffe0b2", pattern:'bee' },
+  { name: "Hornet",          body:"#cc0000", accent:"#ffcc00", ferrule:"#990000", eraser:"#ffe066", pattern:'bee' },
+  // ── More Lightning ──
+  { name: "Pink Lightning",  body:"#1a0010", accent:"#ff69b4", ferrule:"#c2185b", eraser:"#fce4ec", pattern:'lightning' },
+  { name: "Gold Lightning",  body:"#0a0800", accent:"#ffd700", ferrule:"#b8860b", eraser:"#fff8dc", pattern:'lightning' },
+  { name: "Green Lightning", body:"#0a1a0a", accent:"#39ff14", ferrule:"#006400", eraser:"#ccff99", pattern:'lightning' },
+  // ── More Holographic ──
+  { name: "Holo Rose",       body:"#fce4ec", accent:"#c2185b", ferrule:"#f48fb1", eraser:"#fce4ec", pattern:'holographic' },
+  { name: "Holo Midnight",   body:"#1a1a2e", accent:"#e0aaff", ferrule:"#7b2d8b", eraser:"#e1bee7", pattern:'holographic' },
 ];
 
 let pencilIdCounter = 0;
@@ -1116,6 +1296,7 @@ function finishPencil() {
   playDone();
   const p = selectedPencil;
   collection.push(p);
+  saveStub(p);
   selectedPencil = null;
 
   renderStage();
@@ -1249,15 +1430,69 @@ function moveTooltip(e) {
 }
 function hideTooltip() { tip.style.opacity = "0"; }
 
+// ── IndexedDB Persistence ──────────────────────────────────────────────────
+const DB_NAME = 'SharpenIt', DB_VERSION = 1, STORE = 'stubs';
+let db = null;
+
+function openDB() {
+  return new Promise((resolve, reject) => {
+    const req = indexedDB.open(DB_NAME, DB_VERSION);
+    req.onupgradeneeded = e => {
+      e.target.result.createObjectStore(STORE, { keyPath: 'id' });
+    };
+    req.onsuccess = e => { db = e.target.result; resolve(db); };
+    req.onerror   = e => reject(e.target.error);
+  });
+}
+
+function saveStub(p) {
+  if (!db) return;
+  const tx = db.transaction(STORE, 'readwrite');
+  tx.objectStore(STORE).put({ id: p.id, design: p.design, length: p.length });
+}
+
+function loadStubs() {
+  return new Promise((resolve, reject) => {
+    if (!db) return resolve([]);
+    const tx = db.transaction(STORE, 'readonly');
+    const req = tx.objectStore(STORE).getAll();
+    req.onsuccess = e => resolve(e.target.result || []);
+    req.onerror   = e => reject(e.target.error);
+  });
+}
+
+function clearAllStubs() {
+  if (!db) return;
+  const tx = db.transaction(STORE, 'readwrite');
+  tx.objectStore(STORE).clear();
+  collection = [];
+  renderCollection();
+  setStatus('Collection cleared! Fresh start 🧹');
+}
+
 // ── Init ───────────────────────────────────────────────────────────────────────
-// Start with 3 pencils
-addRandomPencil();
-addRandomPencil();
-addRandomPencil();
-renderCollection();
-wireHoldButton();
-// also stop sharpening if mouse released anywhere on page
-document.addEventListener("mouseup", () => stopHold());
+openDB().then(async () => {
+  // load saved stubs first
+  const saved = await loadStubs();
+  if (saved.length > 0) {
+    collection = saved;
+    renderCollection();
+    setStatus(`Welcome back! ${saved.length} stub${saved.length > 1 ? 's' : ''} in your collection 🏆`);
+  }
+  // start with 3 pencils in tray
+  addRandomPencil();
+  addRandomPencil();
+  addRandomPencil();
+  wireHoldButton();
+  document.addEventListener("mouseup", () => stopHold());
+}).catch(() => {
+  // fallback if IndexedDB unavailable
+  addRandomPencil();
+  addRandomPencil();
+  addRandomPencil();
+  wireHoldButton();
+  document.addEventListener("mouseup", () => stopHold());
+});
 </script>
 </body>
 </html>
